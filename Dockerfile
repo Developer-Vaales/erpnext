@@ -4,9 +4,14 @@ FROM frappe/erpnext:latest
 # Switch to the frappe user
 USER frappe
 
-# Copy your custom app code into the 'apps' folder.
-# The base image already has a bench directory.
-COPY . /home/frappe/frappe-bench/apps/erpnext
+# Set the working directory for bench commands
+WORKDIR /home/frappe/frappe-bench
 
-# The entrypoint of this base image will handle starting the server.
-# We do not need a CMD instruction.
+# Get the missing 'payments' app dependency
+RUN bench get-app payments
+
+# Copy your custom app code into the 'apps' folder
+COPY . ./apps/erpnext
+
+# Rebuild assets to include the new app
+RUN bench build --force
