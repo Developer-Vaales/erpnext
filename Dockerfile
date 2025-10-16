@@ -8,4 +8,4 @@ USER frappe
 COPY . /home/frappe/frappe-bench/apps/erpnext
 
 # Use the full path for the start command
-CMD ["/home/frappe/.local/bin/bench", "start"]
+CMD ["bench", "start"]
