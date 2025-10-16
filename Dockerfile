@@ -1,5 +1,5 @@
 # Use an official Frappe base image that has Python, Node, bench, etc.
-FROM frappe/erpnext-worker:v15.25.0
+FROM frappe/erpnext-worker:latest
 
 # Switch to the frappe user
 USER frappe
