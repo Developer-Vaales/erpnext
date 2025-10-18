@@ -3,11 +3,12 @@
 providers = ["python"]
 
 [phases.install]
-# Add python3-pip and build tools to the system packages
-aptPkgs = ["wkhtmltopdf", "mariadb-client", **"python3-pip"**, **"python3-dev"**, **"build-essential"**]
+# Install system-level packages required by Frappe/Python
+aptPkgs = ["wkhtmltopdf", "mariadb-client", "python3-pip", "python3-dev", "build-essential"]
 
-# This command will now work because pip is installed
+# Use pip to install Frappe's command-line tool
 cmds = ["pip install frappe-bench"]
 
 [start]
+# The command to run a Frappe development server
 cmd = "bench start"
