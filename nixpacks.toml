@@ -7,44 +7,6 @@ aptPkgs = ["wkhtmltopdf", "mariadb-client", "python3-pip", "python3-dev", "build
 cmds = ["pip install frappe-bench --break-system-packages"]
 
 [start]
-# This multi-line command is a complete startup script.
-cmd = """
-#!/bin/bash
-set -e
-
-# Check if the bench directory has already been initialized in our persistent volume
-if [ ! -d "frappe-bench/sites" ]; then
-  echo "--- First time setup: Initializing Frappe Bench... ---"
-
-  # 1. Create a new bench in a subdirectory named 'frappe-bench'
-  bench init --skip-redis-config-generation --frappe-branch develop frappe-bench
-
-  # 2. Move into the new bench directory for subsequent commands
-  cd frappe-bench
-
-  # 3. 'get-app' tells the bench about your erpnext app code from the parent directory
-  bench get-app ../
-
-  # 4. Create the new site using your environment variables
-  bench new-site "$SITE_NAME" \
-    --db-name "$DB_NAME" \
-    --db-host "$DB_HOST" \
-    --db-port "$DB_PORT" \
-    --db-root-username "$DB_USER" \
-    --db-root-password "$DB_PASSWORD" \
-    --admin-password "$ADMIN_PASSWORD" \
-    --no-mariadb-socket
-
-  # 5. Install the erpnext app onto your new site
-  bench --site "$SITE_NAME" install-app erpnext
-
-else
-  echo "--- Bench already exists. Skipping setup. ---"
-  # If it exists, just move into the bench directory
-  cd frappe-bench
-fi
-
-echo "--- Starting Frappe server. This may take a moment... ---"
-# Start the production server on the correct port
-bench serve --port 8000
-"""
+# This entire script is now a single-line command to avoid parsing errors.
+# It initializes the site on the first run, and just starts the server on subsequent runs.
+cmd = "bash -c 'set -e; if [ ! -d \"frappe-bench/sites\" ]; then echo \"--- First time setup... ---\" && /usr/local/bin/bench init --skip-redis-config-generation --frappe-branch develop frappe-bench && cd frappe-bench && /usr/local/bin/bench get-app ../ && /usr/local/bin/bench new-site \"$SITE_NAME\" --db-name \"$DB_NAME\" --db-host \"$DB_HOST\" --db-port \"$DB_PORT\" --db-root-username \"$DB_USER\" --db-root-password \"$DB_PASSWORD\" --admin-password \"$ADMIN_PASSWORD\" --no-mariadb-socket && /usr/local/bin/bench --site \"$SITE_NAME\" install-app erpnext; else echo \"--- Bench exists, skipping setup... ---\" && cd frappe-bench; fi; echo \"--- Starting server... ---\" && /usr/local/bin/bench serve --port 8000'"
