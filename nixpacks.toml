@@ -1,14 +1,13 @@
 # nixpacks.toml
 
-# Tell Nixpacks to use the Python environment
 providers = ["python"]
 
 [phases.install]
-# Install system packages required by Frappe
-aptPkgs = ["wkhtmltopdf", "mariadb-client"]
-# Install Frappe's command-line tool
+# Add python3-pip and build tools to the system packages
+aptPkgs = ["wkhtmltopdf", "mariadb-client", **"python3-pip"**, **"python3-dev"**, **"build-essential"**]
+
+# This command will now work because pip is installed
 cmds = ["pip install frappe-bench"]
 
 [start]
-# The standard command to run a Frappe development server
 cmd = "bench start"
