@@ -3,12 +3,9 @@
 providers = ["python"]
 
 [phases.install]
-# These packages are all correct
 aptPkgs = ["wkhtmltopdf", "mariadb-client", "python3-pip", "python3-dev", "build-essential"]
-
-# Add the flag to the pip install command to bypass the environment protection
 cmds = ["pip install frappe-bench --break-system-packages"]
 
 [start]
-# The command to run a Frappe development server
-cmd = "bench start"
+# Use the full path to the bench command
+cmd = "/usr/local/bin/bench start"
