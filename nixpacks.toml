@@ -3,11 +3,11 @@
 providers = ["python"]
 
 [phases.install]
-# Install system-level packages required by Frappe/Python
+# These packages are all correct
 aptPkgs = ["wkhtmltopdf", "mariadb-client", "python3-pip", "python3-dev", "build-essential"]
 
-# Use pip to install Frappe's command-line tool
-cmds = ["pip install frappe-bench"]
+# Add the flag to the pip install command to bypass the environment protection
+cmds = ["pip install frappe-bench --break-system-packages"]
 
 [start]
 # The command to run a Frappe development server
